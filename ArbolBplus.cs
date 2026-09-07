@@ -247,5 +247,43 @@ namespace Proyecto1ED2
             Console.WriteLine("=== Catalogo (Arbol B+) ===");
             Recorrer();
         }
+
+        public Libro[] ObtenerTodos()
+        {
+            int total = ContarLibros();
+            Libro[] resultado = new Libro[total];
+            NodoBPlus actual = raiz;
+            while (!actual.EsHoja)
+            {
+                actual = actual.Hijos[0];
+            }
+            int indice = 0;
+            while (actual != null)
+            {
+                for (int i = 0; i < actual.NumClaves; i++)
+                {
+                    resultado[indice] = actual.Libros[i];
+                    indice++;
+                }
+                actual = actual.Siguiente;
+            }
+            return resultado;
+        }
+        private int ContarLibros()
+        {
+            int total = 0;
+            NodoBPlus actual = raiz;
+            while (!actual.EsHoja)
+            {
+                actual = actual.Hijos[0];
+            }
+            while (actual != null)
+            {
+                total += actual.NumClaves;
+                actual = actual.Siguiente;
+            }
+            return total;
+        }
     }
 }
+

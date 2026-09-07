@@ -1,81 +1,104 @@
 ﻿using System;
 using Proyecto1ED2;
 
-class Program
+public class Program
 {
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
-        ArbolBPlus arbol = new ArbolBPlus();
-        MaxHeap maxHeap = new MaxHeap();
-        MinHeap minHeap = new MinHeap();
+        Biblioteca biblioteca = new Biblioteca();
 
         while (true)
         {
-            Console.WriteLine("\n=== MENU BIBLIOTECA ===");
+            Console.WriteLine();
+            Console.WriteLine("===== CATALOGO DE BIBLIOTECA =====");
             Console.WriteLine("1. Registrar libro");
-            Console.WriteLine("2. Buscar libro por código");
-            Console.WriteLine("3. Mostrar catálogo (B+)");
-            Console.WriteLine("4. Top libros más prestados (MaxHeap)");
-            Console.WriteLine("5. Libro con menos copias (MinHeap)");
-            Console.WriteLine("6. Salir");
-            Console.Write("Seleccione una opción: ");
+            Console.WriteLine("2. Buscar libro");
+            Console.WriteLine("3. Eliminar libro");
+            Console.WriteLine("4. Mostrar catalogo");
+            Console.WriteLine("5. Registrar prestamo");
+            Console.WriteLine("6. Registrar devolucion");
+            Console.WriteLine("7. Mostrar libros mas prestados");
+            Console.WriteLine("8. Mostrar informacion de las estructuras");
+            Console.WriteLine("9. Salir");
+            Console.Write("Elige una opcion: ");
+
             string opcion = Console.ReadLine();
 
             switch (opcion)
             {
                 case "1":
-                    Console.Write("Código: ");
-                    string codigo = Console.ReadLine();
-                    Console.Write("Título: ");
+                    Console.Write("Codigo: ");
+                    string codigoNuevo = Console.ReadLine();
+                    Console.Write("Titulo: ");
                     string titulo = Console.ReadLine();
                     Console.Write("Autor: ");
                     string autor = Console.ReadLine();
-                    Console.Write("Categoría: ");
+                    Console.Write("Categoria: ");
                     string categoria = Console.ReadLine();
                     Console.Write("Copias disponibles: ");
                     int copias = int.Parse(Console.ReadLine());
 
-                    Libro libro = new Libro(codigo, titulo, autor, categoria, copias);
-
-                    arbol.Insertar(libro);
-                    maxHeap.Insertar(libro);
-                    minHeap.Insertar(libro);
-                    Console.WriteLine("Libro registrado.");
+                    Libro libroNuevo = new Libro(codigoNuevo, titulo, autor, categoria, copias);
+                    biblioteca.RegistrarLibro(libroNuevo);
+                    Console.WriteLine("Libro registrado correctamente.");
                     break;
 
                 case "2":
-                    Console.Write("Ingrese código: ");
-                    string buscarCodigo = Console.ReadLine();
-                    var encontrado = arbol.Buscar(buscarCodigo);
-                    if (encontrado != null)
+                    Console.Write("Codigo a buscar: ");
+                    string codigoBuscar = Console.ReadLine();
+                    Libro encontrado = biblioteca.BuscarLibro(codigoBuscar);
+
+                    if (encontrado == null)
                     {
-                        Console.WriteLine($"Libro encontrado:");
-                        Console.WriteLine($"Titulo: {encontrado.Titulo}| {encontrado.Autor}");
-                        Console.WriteLine($"Categoria: {encontrado.Categoria}");
-                        Console.WriteLine($"Copias disponibles: {encontrado.CopiasDisponibles}");
+                        Console.WriteLine("No se encontro un libro con ese codigo.");
                     }
                     else
-                        Console.WriteLine("No se encontró el libro.");
+                    {
+                        Console.WriteLine($"{encontrado.Codigo} - {encontrado.Titulo} - {encontrado.Autor} - {encontrado.Categoria} - Copias: {encontrado.CopiasDisponibles} - Prestamos: {encontrado.VecesPrestado}");
+                    }
                     break;
 
                 case "3":
-                    arbol.Imprimir();
+                    Console.Write("Codigo a eliminar: ");
+                    string codigoEliminar = Console.ReadLine();
+                    Console.WriteLine(biblioteca.EliminarLibro(codigoEliminar));
                     break;
 
                 case "4":
-                    maxHeap.MostrarTopPrestados(5);
+                    biblioteca.ObtenerArbol().Imprimir();
                     break;
 
                 case "5":
-                    var minimo = minHeap.ObtenerMinimo();
-                    if (minimo != null)
-                        Console.WriteLine($"Libro con menos copias: {minimo.Titulo} ({minimo.CopiasDisponibles} copias)");
-                    else
-                        Console.WriteLine("No hay libros registrados.");
+                    Console.Write("Codigo a prestar: ");
+                    string codigoPrestar = Console.ReadLine();
+                    Console.WriteLine(biblioteca.PrestarLibro(codigoPrestar));
                     break;
 
                 case "6":
+                    Console.Write("Codigo a devolver: ");
+                    string codigoDevolver = Console.ReadLine();
+                    Console.WriteLine(biblioteca.DevolverLibro(codigoDevolver));
+                    break;
+
+                case "7":
+                    Console.Write("Cuantos libros del top deseas ver? ");
+                    int cantidadTop = int.Parse(Console.ReadLine());
+                    biblioteca.ObtenerHeapMax().MostrarTopPrestados(cantidadTop);
+                    break;
+
+                case "8":
+                    biblioteca.ObtenerArbol().Imprimir();
+                    biblioteca.ObtenerHeapMin().Imprimir();
+                    biblioteca.ObtenerHeapMax().Imprimir();
+                    break;
+
+                case "9":
+                    Console.WriteLine("Saliendo del sistema...");
                     return;
+
+                default:
+                    Console.WriteLine("Opcion invalida, intenta de nuevo.");
+                    break;
             }
         }
     }
