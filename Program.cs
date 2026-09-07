@@ -14,12 +14,14 @@ public class Program
             Console.WriteLine("1. Registrar libro");
             Console.WriteLine("2. Buscar libro");
             Console.WriteLine("3. Eliminar libro");
-            Console.WriteLine("4. Mostrar catalogo");
-            Console.WriteLine("5. Registrar prestamo");
-            Console.WriteLine("6. Registrar devolucion");
-            Console.WriteLine("7. Mostrar libros mas prestados");
-            Console.WriteLine("8. Mostrar informacion de las estructuras");
-            Console.WriteLine("9. Salir");
+            Console.WriteLine("4. Mostrar catalogo por codigo");
+            Console.WriteLine("5. Mostrar catalogo por titulo");
+            Console.WriteLine("6. Registrar prestamo");
+            Console.WriteLine("7. Registrar devolucion");
+            Console.WriteLine("8. Mostrar libros mas prestados");
+            Console.WriteLine("9. Mostrar informacion de las estructuras");
+            Console.WriteLine("10. Cargar libros desde archivo");
+            Console.WriteLine("11. Salir");
             Console.Write("Elige una opcion: ");
 
             string opcion = Console.ReadLine();
@@ -53,8 +55,15 @@ public class Program
                         Console.WriteLine("No se encontro un libro con ese codigo.");
                     }
                     else
-                    {
-                        Console.WriteLine($"{encontrado.Codigo} - {encontrado.Titulo} - {encontrado.Autor} - {encontrado.Categoria} - Copias: {encontrado.CopiasDisponibles} - Prestamos: {encontrado.VecesPrestado}");
+                    {   
+                        Console.WriteLine();
+                        Console.WriteLine("Libro encontrado:");
+                        Console.WriteLine($"Codigo: {encontrado.Codigo}");
+                        Console.WriteLine($"Titulo: {encontrado.Titulo}");
+                        Console.WriteLine($"Autor: {encontrado.Autor}");
+                        Console.WriteLine($"Categoria: {encontrado.Categoria}");
+                        Console.WriteLine($"Copias disponibles: {encontrado.CopiasDisponibles}");
+                        Console.WriteLine($"Veces prestado: {encontrado.VecesPrestado}");
                     }
                     break;
 
@@ -69,30 +78,40 @@ public class Program
                     break;
 
                 case "5":
+                    biblioteca.MostrarCatalogoPorTitulo();
+                    break;
+
+                case "6":
                     Console.Write("Codigo a prestar: ");
                     string codigoPrestar = Console.ReadLine();
                     Console.WriteLine(biblioteca.PrestarLibro(codigoPrestar));
                     break;
 
-                case "6":
+                case "7":
                     Console.Write("Codigo a devolver: ");
                     string codigoDevolver = Console.ReadLine();
                     Console.WriteLine(biblioteca.DevolverLibro(codigoDevolver));
                     break;
 
-                case "7":
-                    Console.Write("Cuantos libros del top deseas ver? ");
+                case "8":
+                    Console.Write("¿Cuantos libros del top deseas ver?: ");
                     int cantidadTop = int.Parse(Console.ReadLine());
                     biblioteca.ObtenerHeapMax().MostrarTopPrestados(cantidadTop);
                     break;
 
-                case "8":
+                case "9":
                     biblioteca.ObtenerArbol().Imprimir();
                     biblioteca.ObtenerHeapMin().Imprimir();
                     biblioteca.ObtenerHeapMax().Imprimir();
                     break;
 
-                case "9":
+                case "10":
+                    Console.Write("Ruta del archivo (.csv o .txt): ");
+                    string ruta = Console.ReadLine();
+                    Console.WriteLine(biblioteca.CargarDesdeArchivo(ruta));
+                    break;
+
+                case "11":
                     Console.WriteLine("Saliendo del sistema...");
                     return;
 
